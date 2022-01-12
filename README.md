@@ -1,6 +1,6 @@
 # Getting Started
 
-## Test github-webhook TEST
+## Test github-webhook
 ## Windows
 
 ### Compile Code
