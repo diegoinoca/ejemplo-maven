@@ -1,4 +1,7 @@
+
+
 import groovy.json.JsonSlurperClassic
+
 def jsonParse(def json) {
 
     new groovy.json.JsonSlurperClassic().parseText(json)
@@ -11,21 +14,23 @@ pipeline {
 
     stages {
 
-        stage("paso 1"){
+        stage("Paso 1: Download and checkout"){
 
             steps {
 
-                script {
+               checkout(
 
-                sh "echo 'Hello, World Usach 2021!'"
+                        [$class: 'GitSCM',
 
-                }
+                        branches: [[name: "jenkinsfile-as-code" ]],
+
+                        userRemoteConfigs: [[url: 'https://github.com/diegoinoca/ejemplo-maven.git']]])
 
             }
 
         }
 
-        stage("paso 2"){
+        stage("Paso 2: Compliar"){
 
             steps {
 
@@ -33,13 +38,17 @@ pipeline {
 
                 sh "echo 'Compile Code!'"
 
+                // Run Maven on a Unix agent.
+
+                sh "mvn clean compile -e"
+
                 }
 
             }
 
         }
 
-        stage("paso 3"){
+        stage("Paso 3: Testear"){
 
             steps {
 
@@ -47,19 +56,27 @@ pipeline {
 
                 sh "echo 'Test Code!'"
 
+                // Run Maven on a Unix agent.
+
+                sh "mvn clean test -e"
+
                 }
 
             }
 
         }
 
-        stage("paso 4"){
+        stage("Paso 4: Build .Jar"){
 
             steps {
 
                 script {
 
                 sh "echo 'Build .Jar!'"
+
+                // Run Maven on a Unix agent.
+
+                sh "mvn clean package -e"
 
                 }
 
